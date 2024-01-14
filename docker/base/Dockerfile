@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 RUN apt-get update \
     && apt-get -y dist-upgrade \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y git \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y openssh-client ca-certificates git cron \
     && apt-get clean
 
 ARG livegrep_version
