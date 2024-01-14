@@ -46,14 +46,14 @@ var (
 	// TODO: think about how to implement these or something similar for gitlab,
 	// rather than just listing all of the projects that are accessible
 	// flagRepos = stringList{}
-	// flagOrgs  = stringList{}
+	flagGroups = stringList{}
 	// flagUsers = stringList{}
 )
 
 func init() {
 	flag.Var(&flagIndexPath, "out", "Path to write the index")
 	// flag.Var(&flagRepos, "repo", "Specify a repo to index (may be passed multiple times)")
-	// flag.Var(&flagOrgs, "org", "Specify a github organization to index (may be passed multiple times)")
+	flag.Var(&flagGroups, "group", "Specify a gitlab group to index (may be passed multiple times)")
 	// flag.Var(&flagUsers, "user", "Specify a github user to index (may be passed multiple times)")
 }
 
@@ -77,7 +77,7 @@ func main() {
 		log.Fatalf("creating gitlab client: %s", err)
 	}
 
-	repos, err := loadRepos(git)
+	repos, err := loadRepos(git, flagGroups.strings)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
@@ -163,8 +163,34 @@ func loadIgnorelist(path string) (map[string]struct{}, error) {
 	return out, nil
 }
 
-func loadRepos(client *gitlab.Client) ([]*gitlab.Project, error) {
+func loadRepos(client *gitlab.Client, groups []string) ([]*gitlab.Project, error) {
 	var projects []*gitlab.Project
+
+	// TODO: parallelise, deduplicate, etc
+	if len(groups) > 0 {
+		for _, group := range groups {
+			opt := &gitlab.ListGroupProjectsOptions{
+				ListOptions: gitlab.ListOptions{
+					PerPage: 100,
+					Page:    1,
+				},
+			}
+			for {
+				ps, resp, err := client.Groups.ListGroupProjects(group, opt)
+				if err != nil {
+					return nil, err
+				}
+				projects = append(projects, ps...)
+				if resp.NextPage == 0 {
+					break
+				}
+				opt.Page = resp.NextPage
+			}
+		}
+		return projects, nil
+	}
+
+	// read everything the user has access to
 	opt := &gitlab.ListProjectsOptions{
 		Archived: gitlab.Bool(*flagArchived),
 		ListOptions: gitlab.ListOptions{
