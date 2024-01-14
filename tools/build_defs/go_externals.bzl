@@ -40,6 +40,7 @@ _externals = [
     _golang_x("sys", "33540a1f603772f9d4b761f416f5c10dade23e96"),
     _golang_x("crypto", "4b2356b1ed79e6be3deca3737a3db3d132d2847a"),
     _golang_x("sync", "0de741cfad7ff3874b219dfbc1b9195b58c7c490"),
+    _golang_x("time", "883aed519795b30de35e6bc28ec8f681494afa87"),
     struct(
         name = "org_golang_google_appengine",
         commit = "170382fa85b10b94728989dfcf6cc818b335c952",
@@ -55,6 +56,9 @@ _externals = [
     _github("facebookgo/muster", "fd3d7953fd52354a74b9f6b3d70d0c9650c4ec2a"),
     _github("facebookgo/limitgroup", "6abd8d71ec01451d7f1929eacaa263bbe2935d05"),
     _github("facebookgo/clock", "600d898af40aa09a7a93ecb9265d87b0504b6f03"),
+    _github("xanzy/go-gitlab", "e69c57e3177c974dc2396589ec7f9ff18a1ec68e"),
+    _github("hashicorp/go-retryablehttp", "4165cf8897205a879a06b20d1ed0a2a76fbb6a17"),
+    _github("hashicorp/go-cleanhttp", "6d9e2ac5d828e5f8594b97f88c4bde14a67bb6d2"),
     _gopkg("alexcesaro/statsd.v2", "7fea3f0d2fab1ad973e641e51dba45443a311a90"),
     _gopkg("check.v1", "20d25e2804050c1cd24a7eea1e7a6447dd0e74ec"),
     struct(

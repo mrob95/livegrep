@@ -9,6 +9,7 @@ pkg_tar(
             "livegrep",
             "livegrep-fetch-reindex",
             "livegrep-github-reindex",
+            "livegrep-gitlab-reindex",
             "livegrep-reload",
         ]
     ],
